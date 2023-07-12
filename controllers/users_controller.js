@@ -1,7 +1,23 @@
 const User = require('../models/user');
 
 module.exports.profile = function(req, res){
-  return res.end('<h1>User Profile</h1>');
+  if (req.cookies.user_id){
+    User.findById(req.cookies.user_id).then(function(user){
+      if(user){
+        return res.render('user_profile',{
+          title: 'User Profile',
+          user: user
+        })
+      }
+      return res.redirect('./sign-in');
+    }).catch(function(err){
+      console.log('Error in finding user in DB');
+      return res.redirect('./sign-in');
+    })
+  }
+  else{
+    return res.redirect('./sign-in');
+  }
 }
 
 
@@ -28,20 +44,25 @@ module.exports.signIn = function(req, res){
 module.exports.create = function(req, res){
   //TODO
   if (req.body.password != req.body.confirm_password){
+    console.log('Passwords Mismatch');
     return res.redirect('back');
   }
 
   User.findOne({email: req.body.email}).then(function(user){
     if(!user){
       User.create(req.body).then(function(user){
+        console.log('Successfully created user account');
         return res.redirect('/users/sign-in');
+      }).catch(function(err){
+        console.log('Error in creating user while signup');
       });
     }
     else{
+      console.log('user already found cannot create new acccount sign in with your account detials');
       return res.redirect('back');
     }
   }).catch(function(err){
-    console.log('Error');  
+    console.log('error in finding  user while signing up');  
   });
 }
 
@@ -50,4 +71,29 @@ module.exports.create = function(req, res){
 //sign-in and craete session for the user
 module.exports.createSession = function(req, res){
   //TODO
+  // find the user
+  User.findOne({email: req.body.email}).then(function(user){
+    //handle user found
+    if(user){
+      //handle passwords when dont match
+      if(user.password != req.body.password){
+        console.log('passwprds are nt matcjiong');
+        return res.redirect('back');
+      }
+
+      //handle sesssioin creation
+      res.cookie('user_id',user.id);
+      return res.redirect('./profile');
+    }
+    else{
+      console.log('User not found please sign up adnd create an account to login');
+      res.redirect('back');
+    }
+  }).catch(function(err){
+      //handle user not found
+      console.log('error in finding  user while signing up');  
+    });
+
+
+
 }

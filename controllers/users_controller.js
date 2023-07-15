@@ -1,7 +1,9 @@
 const User = require('../models/user');
 
 module.exports.profile = function(req, res){
-  return res.end('<h1>User Profile</h1>');
+  return res.render('user_profile',{
+    title: 'Code Social App',
+  });
 }
 
 
@@ -50,5 +52,7 @@ module.exports.create = function(req, res){
 //sign-in and craete session for the user
 module.exports.createSession = function(req, res){
   //TODO
+  return res.redirect('/');
+
   
 }

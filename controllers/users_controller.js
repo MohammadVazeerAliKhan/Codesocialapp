@@ -94,6 +94,6 @@ module.exports.createSession = function(req, res){
       console.log('error in finding  user while signing up');  
     });
 
-
-
 }
+
+

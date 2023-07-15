@@ -1,9 +1,23 @@
 const User = require('../models/user');
 
 module.exports.profile = function(req, res){
-  return res.render('user_profile',{
-    title: 'Code Social App',
-  });
+  if (req.cookies.user_id){
+    User.findById(req.cookies.user_id).then(function(user){
+      if(user){
+        return res.render('user_profile',{
+          title: 'User Profile',
+          user: user
+        })
+      }
+      return res.redirect('./sign-in');
+    }).catch(function(err){
+      console.log('Error in finding user in DB');
+      return res.redirect('./sign-in');
+    })
+  }
+  else{
+    return res.redirect('./sign-in');
+  }
 }
 
 
@@ -13,6 +27,9 @@ module.exports.likes = function(req, res){
 
 
 module.exports.signUp = function(req, res){
+  if (req.isAuthenticated()){
+    return res.redirect('/users/profile');
+  }
   return res.render('user_sign_up',{
     title: "CodeSocailApp 1 Sign Up"
   })
@@ -20,6 +37,9 @@ module.exports.signUp = function(req, res){
 
 
 module.exports.signIn = function(req, res){
+  if (req.isAuthenticated()){
+    return res.redirect('/users/profile');
+  }
   return res.render('user_sign_in',{
     title: "CodeSocailApp 1 Sign In"
   })

@@ -45,6 +45,16 @@ module.exports.signIn = function(req, res){
   })
 }
 
+module.exports.destroySession = function(req, res){
+  req.logout((err) => {
+    if(err){
+      console.log(err);
+      return;
+    }
+  });
+
+  return res.redirect('/');
+}
 
 //get the sign-up data
 module.exports.create = function(req, res){

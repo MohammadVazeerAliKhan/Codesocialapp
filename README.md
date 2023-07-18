@@ -9,3 +9,10 @@ Stop Watch is basically used for calculating time of an activity. I have created
 
 ## 🔨 Tools Used
 ![toolsused](https://github.com/MohammadVazeerAliKhan/Codesocialapp/assets/119596941/1d58de5d-7c86-469f-b6ff-014e72c55938)
+
+
+*Programming / Scripting: JavaScript
+*Front-End: HTML, CSS
+*Integrated Development Environment: VSCode
+*Version Control System: Git
+*VCS Hosting: GitHub
